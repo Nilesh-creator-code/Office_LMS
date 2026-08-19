@@ -1,5 +1,6 @@
 package LMS_Project.LMS_Project.service;
 
+import LMS_Project.LMS_Project.dto.LoginDto;
 import LMS_Project.LMS_Project.dto.UserDto;
 import LMS_Project.LMS_Project.entity.User;
 import LMS_Project.LMS_Project.repository.UserRepository;
@@ -7,6 +8,8 @@ import LMS_Project.LMS_Project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -38,6 +41,26 @@ public class UserService {
         userRepository.save(user);
 
         return "User added successfully";
+    }
+
+
+    // For User Login
+    public String LoginUser(LoginDto loginDto) {
+
+        Optional<User> userauth =
+                userRepository.findByUsername(loginDto.getUserName());
+
+
+        User user = userauth.get();
+
+        if (!passwordEncoder.matches(
+                loginDto.getPassword(),
+                user.getPassword())) {
+
+            return "Invalid password";
+        }
+
+        return "Login successful";
     }
 
 
