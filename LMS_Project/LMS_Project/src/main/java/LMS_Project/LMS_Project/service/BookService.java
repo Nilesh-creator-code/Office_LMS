@@ -47,4 +47,47 @@ public class BookService {
 
         return "Book added successfully";
     }
+
+
+    public String updateBook(Long bookId, BookDto bookDto) {
+
+    Authentication authentication =
+            SecurityContextHolder.getContext().getAuthentication();
+
+    String username = authentication.getName();
+
+    User currentUser = userRepository.findByUsername(username)
+            .orElseThrow(() ->
+                    new RuntimeException(
+                            "User not found with username: " + username
+                    )
+            );
+
+    Book book = bookRepository.findById(bookId)
+            .orElseThrow(() ->
+                    new RuntimeException(
+                            "Book not found with id: " + bookId
+                    )
+            );
+
+    // Make sure the logged-in user owns this book
+    if (!book.getUser().getId().equals(currentUser.getId())) {
+        throw new RuntimeException(
+                "You are not authorized to update this book"
+        );
+    }
+
+    // Update book fields
+    book.setTitle(bookDto.getTitle());
+    book.setAuthor(bookDto.getAuthor());
+    book.setDescription(bookDto.getDescription());
+
+    bookRepository.save(book);
+
+    return "Book updated successfully";
+}
+
+
+
+
 }
