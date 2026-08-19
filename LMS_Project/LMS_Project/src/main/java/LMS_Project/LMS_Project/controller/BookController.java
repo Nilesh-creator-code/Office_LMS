@@ -2,6 +2,9 @@ package LMS_Project.LMS_Project.controller;
 
 
 import LMS_Project.LMS_Project.service.BookService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,5 +44,13 @@ public class BookController {
     }
 
 
+
+    // Get All book by user
+    @GetMapping("/all")
+    public ResponseEntity<List<BookDto>> getAllBooks() {
+        List<BookDto> books = bookService.getAllBooks();
+        return ResponseEntity.ok(books);
+    }
+    
 
 }

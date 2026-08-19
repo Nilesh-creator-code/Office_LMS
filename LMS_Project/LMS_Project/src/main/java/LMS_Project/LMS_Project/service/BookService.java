@@ -10,6 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class BookService {
 
@@ -87,7 +90,18 @@ public class BookService {
     return "Book updated successfully";
 }
 
+private List<BookDto> getAllBooksByUser(User user) {
 
+    List<Book> books = bookRepository.findByUser(user);
+
+    return books.stream()
+            .map(book -> new BookDto(
+                    book.getId(),
+                    book.getTitle(),
+                    book.getAuthor(),
+                    book.getDescription()
+            ))
+            .collect(Collectors.toList());}
 
 
 }
