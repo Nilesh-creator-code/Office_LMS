@@ -51,6 +51,22 @@ public class BookService {
         return "Book added successfully";
     }
 
+    public BookDto getBookDetail(Long bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Book not found with id: " + bookId
+                        )
+                );
+
+        return new BookDto(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getDescription()
+        );
+    }
+
 
     public String updateBook(Long bookId, BookDto bookDto) {
 

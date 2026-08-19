@@ -51,6 +51,14 @@ public class BookController {
         List<BookDto> books = bookService.getAllBooks();
         return ResponseEntity.ok(books);
     }
+
+    // Get Book Detail by bookId
+    @GetMapping("/{bookId}")
+    public ResponseEntity<BookDto> getBookDetail(@PathVariable Long bookId) {
+        BookDto bookDto = bookService.getBookDetail(bookId);
+        return ResponseEntity.ok(bookDto);
+    }
+
     
 
 }
