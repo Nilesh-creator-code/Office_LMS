@@ -106,9 +106,20 @@ public class BookService {
     return "Book updated successfully";
 }
 
-private List<BookDto> getAllBooksByUser(User user) {
+public List<BookDto> getAllBooksByUser() {
+    Authentication authentication =
+            SecurityContextHolder.getContext().getAuthentication();
 
-    List<Book> books = bookRepository.findByUser(user);
+    String username = authentication.getName();
+
+    User currentUser = userRepository.findByUsername(username)
+            .orElseThrow(() ->
+                    new RuntimeException(
+                            "User not found with username: " + username
+                    )
+            );
+
+    List<Book> books = bookRepository.findByUser(currentUser);
 
     return books.stream()
             .map(book -> new BookDto(
@@ -117,7 +128,8 @@ private List<BookDto> getAllBooksByUser(User user) {
                     book.getAuthor(),
                     book.getDescription()
             ))
-            .collect(Collectors.toList());}
+            .collect(Collectors.toList());
+        }
 
 
 }

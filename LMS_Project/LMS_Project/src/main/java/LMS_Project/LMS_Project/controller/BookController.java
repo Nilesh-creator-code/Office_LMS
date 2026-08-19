@@ -48,7 +48,7 @@ public class BookController {
     // Get All book by user
     @GetMapping("/all")
     public ResponseEntity<List<BookDto>> getAllBooks() {
-        List<BookDto> books = bookService.getAllBooks();
+        List<BookDto> books = bookService.getAllBooksByUser();
         return ResponseEntity.ok(books);
     }
 
