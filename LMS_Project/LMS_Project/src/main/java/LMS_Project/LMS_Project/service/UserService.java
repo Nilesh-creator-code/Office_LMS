@@ -20,6 +20,9 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtService jwtService;
+
 
     public String addNewUser(UserDto userDto) {
 
@@ -50,6 +53,9 @@ public class UserService {
         Optional<User> userauth =
                 userRepository.findByUsername(loginDto.getUserName());
 
+        if (userauth.isEmpty()) {
+            return "Invalid username";
+        }
 
         User user = userauth.get();
 
@@ -60,7 +66,7 @@ public class UserService {
             return "Invalid password";
         }
 
-        return "Login successful";
+        return jwtService.generateToken(user.getUsername());
     }
 
 

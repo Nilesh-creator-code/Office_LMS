@@ -1,5 +1,8 @@
 package LMS_Project.LMS_Project.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -29,4 +32,12 @@ public class User {
 
     @Column(name = "full_name")
     private String fullName;
+
+        @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Book> books = new ArrayList<>();
+
 }

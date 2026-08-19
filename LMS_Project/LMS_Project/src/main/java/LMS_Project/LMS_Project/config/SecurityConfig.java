@@ -20,7 +20,7 @@ public class SecurityConfig {
 
     @Bean
     @Order(1)
-    public SecurityFilterChain publicAuthSecurityFilterChain(
+    public SecurityFilterChain authSecurityFilterChain(
             HttpSecurity http) throws Exception {
 
         http
@@ -40,7 +40,7 @@ public class SecurityConfig {
 
     @Bean
     @Order(2)
-    public SecurityFilterChain securityFilterChain(
+    public SecurityFilterChain apiSecurityFilterChain(
             HttpSecurity http) throws Exception {
 
         http

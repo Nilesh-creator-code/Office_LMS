@@ -1,0 +1,50 @@
+package LMS_Project.LMS_Project.service;
+
+import LMS_Project.LMS_Project.dto.BookDto;
+import LMS_Project.LMS_Project.entity.Book;
+import LMS_Project.LMS_Project.entity.User;
+import LMS_Project.LMS_Project.repository.BookRepository;
+import LMS_Project.LMS_Project.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class BookService {
+
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    // Add new book by logged-in user
+    public String addNewBook(BookDto bookDto) {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+
+        System.out.println("Authenticated username: " + username);
+
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "User not found with username: " + username
+                        )
+                );
+
+        Book book = Book.builder()
+                .title(bookDto.getTitle())
+                .author(bookDto.getAuthor())
+                .description(bookDto.getDescription())
+                .user(currentUser)
+                .build();
+
+        bookRepository.save(book);
+
+        return "Book added successfully";
+    }
+}
